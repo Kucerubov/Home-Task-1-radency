@@ -1,65 +1,65 @@
 const testData = [
     {
-        name: "Запись 1",
+        name: "Note 1",
         created: "July 28, 2023",
         category: "Task",
-        content: "Содержимое записи 1",
+        content: "Post content 1",
         dates: "",
         archived: false
     },
     {
-        name: "Запись 2",
+        name: "Note 2",
         created: "July 27, 2023",
         category: "Idea",
-        content: "Содержимое записи 2",
+        content: "Post content 2",
         dates: "",
         archived: false
     },
     {
-        name: "Запись 3",
+        name: "Note 3",
         created: "July 26, 2023",
         category: "Random Thought",
-        content: "Содержимое записи 2",
+        content: "Post content 3",
         dates: "",
         archived: false
     },
     {
-        name: "Запись 4",
+        name: "Note 4",
         created: "July 25, 2023",
         category: "Idea",
-        content: "Содержимое записи 2",
+        content: "Post content 4",
         dates: "",
         archived: false
     },
     {
-        name: "Запись 5",
+        name: "Note 5",
         created: "July 24, 2023",
         category: "Task",
-        content: "Содержимое записи 2",
+        content: "Post content 5",
         dates: "",
         archived: false
     },
     {
-        name: "Запись 6",
+        name: "Note 6",
         created: "July 23, 2023",
         category: "Random Thought",
-        content: "Содержимое записи 2",
+        content: "Post content 6",
         dates: "",
         archived: true
     },
     {
-        name: "Запись 7",
+        name: "Note 7",
         created: "July 22, 2023",
         category: "Idea",
-        content: "Содержимое записи 2",
+        content: "Post content 7",
         dates: "",
         archived: true
     },
     {
-        name: "Запись 8",
+        name: "Note 8",
         created: "July 21, 2023",
         category: "Task",
-        content: "Содержимое записи 2",
+        content: "Post content 8",
         dates: "",
         archived: true
     }
@@ -67,9 +67,7 @@ const testData = [
 
 let showArchivedData = false;
 
-document.querySelector("#toggleButton").addEventListener("click", toggleRenderTable);
-
-function toggleRenderTable() {
+document.querySelector("#toggleButton").addEventListener("click", () => {
     if (showArchivedData) {
         renderTable();
         this.innerText = "See archive note";
@@ -78,7 +76,7 @@ function toggleRenderTable() {
         this.innerText = "Hide archive note";
     }
     showArchivedData = !showArchivedData;
-}
+});
 
 
  function renderTable(showArchive = false) {
@@ -113,7 +111,11 @@ function toggleRenderTable() {
                 <button class="icon-btn" onclick="editRow(this)">
                     <i class="fas fa-edit"></i>
                 </button>
-                ${value.archived ? '<button class="icon-btn" onclick="archiveRow(this)">Unzip</button>' : '<button class="icon-btn" onclick="archiveRow(this)"><i class="fas fa-archive"></i></button>'}
+                ${
+                 value.archived ? '<button class="icon-btn" onclick="archiveRow(this)">Unzip</button>' 
+                : '<button class="icon-btn" onclick="archiveRow(this)"><i ' +
+                'class="fas fa-archive"></i></button>'
+                }
                 <button class="icon-btn" onclick="deleteRow(this)">
                     <i class="fas fa-trash"></i>
                 </button>
@@ -135,10 +137,10 @@ function addNewRow() {
         const formattedDate = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
 
         testData.push({
-            name: `Запись ${num}`,
+            name: `Note ${num}`,
             created: formattedDate,
             category: `Task`,
-            content: `Содержимое записи ${num}`,
+            content: `Post content ${num}`,
             dates: "",
             archived: false
         });
@@ -167,33 +169,38 @@ function addNewRow() {
      }
  }
 
+function extractAndAppendDates(sentence) {
+    const dateRegex = /\b(\d{1,2}\.\d{1,2}\.\d{4})\b/g;
+    const datesFound = sentence.match(dateRegex);
+
+    if (datesFound && datesFound.length >= 2) {
+       return testData[testData.length - 1].dates = datesFound.join(", ");
+    }
+}
+
 function saveChanges(row, cells, editButton) {
     const name = cells[0].getElementsByTagName("input")[0].value;
     const category = cells[2].getElementsByTagName("select")[0].value;
     const content = cells[3].getElementsByTagName("input")[0].value;
-    const dates = cells[4].getElementsByTagName("input")[0].value;
 
-    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
-    if (!datePattern.test(dates) || dates === '') {
-        alert("Invalid data! Insert YYYY-MM-DD.");
-        return;
-    }
+    const datesFromContent = extractAndAppendDates(content);
 
     const rowIndex = row.rowIndex - 1;
     testData[rowIndex].name = name;
     testData[rowIndex].category = category;
     testData[rowIndex].content = content;
-    testData[rowIndex].dates = dates;
+    testData[rowIndex].dates = datesFromContent;
 
     cells[0].innerHTML = name;
     cells[2].innerHTML = category;
     cells[3].innerHTML = content;
-    cells[4].innerHTML = dates;
+    cells[4].innerHTML = datesFromContent;
 
     row.classList.remove("editing");
     editButton.innerHTML = `<i class="fas fa-edit"></i>`;
     renderCategoryTable();
 }
+
 
 function enterEditMode(row, cells, currentCategory, categories, editButton) {
     for (let i = 0; i < cells.length - 1; i++) {
