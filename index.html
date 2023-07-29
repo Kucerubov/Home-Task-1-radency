@@ -4,36 +4,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Моя веб-страница</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Моя таблица</h1>
-<table id="myTable">
-    <tr>
-        <th>a</th>
-        <th>Name</th>
-        <th>Created</th>
-        <th>Category</th>
-        <th>Content</th>
-        <th>Dates</th>
-        <th>a</th>
-        <th>a</th>
-        <th>a</th>
-    </tr>
-</table>
-<button onclick="addNewRow()">Create Note</button>
 
-<table id="noteCategory">
-    <tr>
-        <th></th>
-        <th>Note Category</th>
-        <th>Active</th>
-        <th>Archived</th>
-    </tr>
-</table>
-<button onclick="renderTable(true)">See archive note</button>
+<div class="container mt-4">
+    <table class="table table-bordered" id="myTable"></table>
+    <div class="text-right">
+        <button class="btn btn-primary" onclick="addNewRow()">Create Note</button>
+    </div>
+    <table class="table table-bordered" id="noteCategory"></table>
+    <div class="text-right">
+        <button id="toggleButton" class="btn btn-primary">See archive note</button>
+    </div>
+</div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 <script src="src/index.js"></script>
 
 </body>
+
 </html>

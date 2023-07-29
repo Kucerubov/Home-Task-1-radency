@@ -16,7 +16,7 @@ const testData = [
         archived: false
     },
     {
-        name: "Запись 2",
+        name: "Запись 3",
         created: "July 26, 2023",
         category: "Random Thought",
         content: "Содержимое записи 2",
@@ -24,7 +24,7 @@ const testData = [
         archived: false
     },
     {
-        name: "Запись 2",
+        name: "Запись 4",
         created: "July 25, 2023",
         category: "Idea",
         content: "Содержимое записи 2",
@@ -32,7 +32,7 @@ const testData = [
         archived: false
     },
     {
-        name: "Запись 2",
+        name: "Запись 5",
         created: "July 24, 2023",
         category: "Task",
         content: "Содержимое записи 2",
@@ -40,7 +40,7 @@ const testData = [
         archived: false
     },
     {
-        name: "Запись 2",
+        name: "Запись 6",
         created: "July 23, 2023",
         category: "Random Thought",
         content: "Содержимое записи 2",
@@ -48,7 +48,7 @@ const testData = [
         archived: true
     },
     {
-        name: "Запись 2",
+        name: "Запись 7",
         created: "July 22, 2023",
         category: "Idea",
         content: "Содержимое записи 2",
@@ -56,7 +56,7 @@ const testData = [
         archived: true
     },
     {
-        name: "Запись 2",
+        name: "Запись 8",
         created: "July 21, 2023",
         category: "Task",
         content: "Содержимое записи 2",
@@ -65,53 +65,89 @@ const testData = [
     }
 ];
 
-function renderTable(showArchivedData = false) {
-    const table = document.getElementById("myTable");
-    table.innerHTML = '';
+let showArchivedData = false;
 
-    const headerRow = table.insertRow(0);
-    headerRow.innerHTML = '<th></th><th>Name</th><th>Created</th><th>Category</th><th>Content</th><th>Dates</th><th></th><th></th><th></th>';
+document.querySelector("#toggleButton").addEventListener("click", toggleRenderTable);
+
+function toggleRenderTable() {
+    if (showArchivedData) {
+        renderTable();
+        this.innerText = "See archive note";
+    } else {
+        renderTable(true);
+        this.innerText = "Hide archive note";
+    }
+    showArchivedData = !showArchivedData;
+}
+
+
+ function renderTable(showArchive = false) {
+    const table = document.getElementById("myTable");
+    table.innerHTML = '<table class="table table-bordered" id="myTable">';
+
+    table.innerHTML = `
+           <tr class="header">
+           <th>Name</th>
+           <th>Created</th>
+           <th>Category</th>
+           <th>Content</th>
+           <th>Dates</th>
+           <th class="text-right">
+              <i class="fas fa-archive"></i>
+              <i class="fas fa-trash"></i>
+           </th>
+           </tr>`;
 
     testData.forEach((value, index) => {
         let row = table.insertRow(index + 1);
-        if (value.archived === showArchivedData){
-          row.innerHTML = `
-                <td>a</td>
+        if (value.archived === showArchive){
+          row.innerHTML =
+          `
+          <tr>
             <td>${value.name}</td>
             <td>${value.created}</td>
             <td>${value.category}</td>
             <td>${value.content}</td>
             <td>${value.dates}</td>
-            <td>${value.archived ? '<button onclick="archiveRow(this)">Unzip</button>' : '<button onclick="archiveRow(this)">Archive</button>'}</td>
-            <td><button onclick="editRow(this)">Edit</button></td>
-            <td><button onclick="deleteRow(this)">Delte</button></td>
-                `;
+            <td class="text-right">
+                <button class="icon-btn" onclick="editRow(this)">
+                    <i class="fas fa-edit"></i>
+                </button>
+                ${value.archived ? '<button class="icon-btn" onclick="archiveRow(this)">Unzip</button>' : '<button class="icon-btn" onclick="archiveRow(this)"><i class="fas fa-archive"></i></button>'}
+                <button class="icon-btn" onclick="deleteRow(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>`;
         }
     })
 }
 
-// изменить
 function addNewRow() {
-    const num = testData.length + 1;
-    const currentDate = new Date();
-    const monthNames = [
-        "January", "February", "March", "April", "May", "June", "July",
-        "August", "September", "October", "November", "December"
-    ];
+    try {
+        const num = testData.length + 1;
+        const currentDate = new Date();
+        const monthNames = [
+            "January", "February", "March", "April", "May", "June", "July",
+            "August", "September", "October", "November", "December"
+        ];
 
-    const formattedDate = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
+        const formattedDate = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
 
-    testData.push({
-        name: `Запись ${num}`,
-        created: formattedDate,
-        category: `Task`,
-        content: `Содержимое записи ${num}`,
-        dates: "",
-        archived: false
-    });
+        testData.push({
+            name: `Запись ${num}`,
+            created: formattedDate,
+            category: `Task`,
+            content: `Содержимое записи ${num}`,
+            dates: "",
+            archived: false
+        });
 
-    renderCategoryTable();
-    renderTable();
+        renderCategoryTable();
+        renderTable();
+    } catch (error) {
+        console.error("An error occurred while adding a new row:", error);
+    }
 }
 
 
@@ -132,11 +168,10 @@ function addNewRow() {
  }
 
 function saveChanges(row, cells, editButton) {
-    const name = cells[1].getElementsByTagName("input")[0].value;
-    const category = cells[3].getElementsByTagName("select")[0].value;
-    const content = cells[4].getElementsByTagName("input")[0].value;
-    const dates = cells[5].getElementsByTagName("input")[0].value;
-
+    const name = cells[0].getElementsByTagName("input")[0].value;
+    const category = cells[2].getElementsByTagName("select")[0].value;
+    const content = cells[3].getElementsByTagName("input")[0].value;
+    const dates = cells[4].getElementsByTagName("input")[0].value;
 
     const datePattern = /^\d{4}-\d{2}-\d{2}$/;
     if (!datePattern.test(dates) || dates === '') {
@@ -150,27 +185,26 @@ function saveChanges(row, cells, editButton) {
     testData[rowIndex].content = content;
     testData[rowIndex].dates = dates;
 
-    cells[1].innerHTML = name;
-    cells[3].innerHTML = category;
-    cells[4].innerHTML = content;
-    cells[5].innerHTML = dates;
+    cells[0].innerHTML = name;
+    cells[2].innerHTML = category;
+    cells[3].innerHTML = content;
+    cells[4].innerHTML = dates;
 
     row.classList.remove("editing");
-    editButton.innerHTML = "Edit";
+    editButton.innerHTML = `<i class="fas fa-edit"></i>`;
     renderCategoryTable();
 }
 
 function enterEditMode(row, cells, currentCategory, categories, editButton) {
-    for (let i = 1; i < cells.length - 3; i++) {
-        if (i !== 2) {
+    for (let i = 0; i < cells.length - 1; i++) {
+        if (i !== 1) {
             const cellValue = cells[i].innerHTML;
-            if (i === 3) {
-                let selectHTML = '<select>';
-                categories.forEach((category) => {
-                    selectHTML += `<option value="${category}" ${category === currentCategory ? 'selected' : ''}>${category}</option>`;
+            if (i === 2) {
+                const selectOptions = categories.map(category => {
+                    const selectedAttribute = category === currentCategory ? 'selected' : '';
+                    return `<option value="${category}" ${selectedAttribute}>${category}</option>`;
                 });
-                selectHTML += '</select>';
-                cells[i].innerHTML = selectHTML;
+                cells[i].innerHTML = '<select>' + selectOptions.join('') + '</select>';
             } else {
                 cells[i].innerHTML = `<input type="text" value="${cellValue}">`;
             }
@@ -180,11 +214,12 @@ function enterEditMode(row, cells, currentCategory, categories, editButton) {
     editButton.innerHTML = "Save";
 }
 
+
 function editRow(button) {
     const row = button.parentNode.parentNode;
     const cells = row.getElementsByTagName("td");
     const editButton = button;
-    const currentCategory = cells[3].innerText;
+    const currentCategory = cells[2].innerText;
     const categories = ["Task", "Idea", "Random Thought"];
 
     if (row.classList.contains("editing")) {
@@ -229,18 +264,22 @@ function deleteRow(button) {
  function renderCategoryTable() {
      updateCategoryData();
      const table = document.getElementById("noteCategory");
-     table.innerHTML = '';
-
-     const headerRow = table.insertRow(0);
-     headerRow.innerHTML = '<th>a</th><th>Note Category</th><th>Active</th><th>Archived</th>';
+     table.innerHTML = ' <table class="table table-bordered" id="noteCategory">';
+     table.innerHTML = `
+        <tr class="header-archive">
+            <th>Note Category</th>
+            <th>Active</th>
+            <th>Archived</th>
+        </tr>`;
 
      categoryData.forEach((value, index) => {
          let row = table.insertRow(index + 1);
          row.innerHTML = `
-          <td>a</td>
-          <td>${value.category}</td>
-          <td>${value.archivedCount}</td>
-          <td>${value.unarchivedCount}</td>
+          <tr>
+            <td>${value.category}</td>
+            <td>${value.archivedCount}</td>
+            <td>${value.unarchivedCount}</td>
+          </tr>
         `;
      })
  }

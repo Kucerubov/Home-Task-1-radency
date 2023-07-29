@@ -1,27 +1,75 @@
-table {
-    border-collapse: collapse;
-    width: 100%;
+thead{
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
-th, td {
-    padding: 8px;
-    text-align: left;
+.fa-edit, .fa-archive{
+    margin-right: 7px;
+}
+
+.header, .header-archive{
+    background-color: grey;
+    color: white;
+}
+
+.btn-primary{
+    margin-bottom: 50px;
+}
+
+td {
+    background-color: gainsboro;
+}
+
+table.table-bordered {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+table.table-bordered th,
+table.table-bordered td {
     border: none;
 }
 
-tr {
-    background-color: #b4aaaa;
+table.table-bordered tbody {
+    padding: 10px;
+    border-radius: 10px;
 }
 
-tr:first-child th {
-    background-color: gray;
-    color: black;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+table.table-bordered {
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-tr:last-child {
-    background-color: #f2f2f2;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+table.table-bordered th,
+table.table-bordered td {
+    border: none;
+}
+
+table.table-bordered tbody tr {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+table.table-bordered td.text-right {
+    text-align: right;
+}
+
+table.table-bordered tbody tr {
+    margin-bottom: 10px;
+}
+
+.circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #343a40;
+}
+
+.icon-btn{
+    border: none;
+    background: none;
+    padding: 3px;
 }
