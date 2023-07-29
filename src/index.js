@@ -1,7 +1,7 @@
 const testData = [
     {
         name: "Запись 1",
-        created: "2023-07-27",
+        created: "July 28, 2023",
         category: "Task",
         content: "Содержимое записи 1",
         dates: "",
@@ -9,7 +9,7 @@ const testData = [
     },
     {
         name: "Запись 2",
-        created: "2023-07-28",
+        created: "July 27, 2023",
         category: "Idea",
         content: "Содержимое записи 2",
         dates: "",
@@ -17,7 +17,7 @@ const testData = [
     },
     {
         name: "Запись 2",
-        created: "2023-07-28",
+        created: "July 26, 2023",
         category: "Random Thought",
         content: "Содержимое записи 2",
         dates: "",
@@ -25,7 +25,7 @@ const testData = [
     },
     {
         name: "Запись 2",
-        created: "2023-07-28",
+        created: "July 25, 2023",
         category: "Idea",
         content: "Содержимое записи 2",
         dates: "",
@@ -33,7 +33,7 @@ const testData = [
     },
     {
         name: "Запись 2",
-        created: "2023-07-28",
+        created: "July 24, 2023",
         category: "Task",
         content: "Содержимое записи 2",
         dates: "",
@@ -41,7 +41,7 @@ const testData = [
     },
     {
         name: "Запись 2",
-        created: "2023-07-28",
+        created: "July 23, 2023",
         category: "Random Thought",
         content: "Содержимое записи 2",
         dates: "",
@@ -49,7 +49,7 @@ const testData = [
     },
     {
         name: "Запись 2",
-        created: "2023-07-28",
+        created: "July 22, 2023",
         category: "Idea",
         content: "Содержимое записи 2",
         dates: "",
@@ -57,7 +57,7 @@ const testData = [
     },
     {
         name: "Запись 2",
-        created: "2023-07-28",
+        created: "July 21, 2023",
         category: "Task",
         content: "Содержимое записи 2",
         dates: "",
@@ -70,7 +70,7 @@ function renderTable(showArchivedData = false) {
     table.innerHTML = '';
 
     const headerRow = table.insertRow(0);
-    headerRow.innerHTML = '<th>a</th><th>Name</th><th>Created</th><th>Category</th><th>Content</th><th>Dates</th><th>a</th><th>a</th><th>a</th>';
+    headerRow.innerHTML = '<th></th><th>Name</th><th>Created</th><th>Category</th><th>Content</th><th>Dates</th><th></th><th></th><th></th>';
 
     testData.forEach((value, index) => {
         let row = table.insertRow(index + 1);
@@ -82,9 +82,9 @@ function renderTable(showArchivedData = false) {
             <td>${value.category}</td>
             <td>${value.content}</td>
             <td>${value.dates}</td>
-            <td>${value.archived ? '<button onclick="archiveRow(this)">Разархивировать</button>' : '<button onclick="archiveRow(this)">Архивировать</button>'}</td>
-            <td><button onclick="editRow(this)">Редактировать</button></td>
-            <td><button onclick="deleteRow(this)">Удалить</button></td>
+            <td>${value.archived ? '<button onclick="archiveRow(this)">Unzip</button>' : '<button onclick="archiveRow(this)">Archive</button>'}</td>
+            <td><button onclick="editRow(this)">Edit</button></td>
+            <td><button onclick="deleteRow(this)">Delte</button></td>
                 `;
         }
     })
@@ -94,24 +94,26 @@ function renderTable(showArchivedData = false) {
 function addNewRow() {
     const num = testData.length + 1;
     const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = currentDate.getDate().toString().padStart(2, '0');
-    const formattedDate = year + '-' + month + '-' + day;
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June", "July",
+        "August", "September", "October", "November", "December"
+    ];
 
-    testData.push(
-    {
+    const formattedDate = `${monthNames[currentDate.getMonth()]} ${currentDate.getDate()}, ${currentDate.getFullYear()}`;
+
+    testData.push({
         name: `Запись ${num}`,
         created: formattedDate,
         category: `Task`,
         content: `Содержимое записи ${num}`,
         dates: "",
         archived: false
-    }
-    )
+    });
+
     renderCategoryTable();
     renderTable();
 }
+
 
  function archiveRow(button) {
      const row = button.parentNode.parentNode;
@@ -129,55 +131,69 @@ function addNewRow() {
      }
  }
 
- function editRow(button) {
-     const row = button.parentNode.parentNode;
-     const cells = row.getElementsByTagName("td");
-     const editButton = button;
-     const currentCategory = cells[3].innerText;
+function saveChanges(row, cells, editButton) {
+    const name = cells[1].getElementsByTagName("input")[0].value;
+    const category = cells[3].getElementsByTagName("select")[0].value;
+    const content = cells[4].getElementsByTagName("input")[0].value;
+    const dates = cells[5].getElementsByTagName("input")[0].value;
 
-     const categories = ["Task", "Idea", "Random Thought"];
 
-     if (row.classList.contains("editing")) {
+    const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+    if (!datePattern.test(dates) || dates === '') {
+        alert("Invalid data! Insert YYYY-MM-DD.");
+        return;
+    }
 
-         const name = cells[1].getElementsByTagName("input")[0].value;
-         const category = cells[3].getElementsByTagName("select")[0].value;
-         const content = cells[4].getElementsByTagName("input")[0].value;
-         const dates = cells[5].getElementsByTagName("input")[0].value;
+    const rowIndex = row.rowIndex - 1;
+    testData[rowIndex].name = name;
+    testData[rowIndex].category = category;
+    testData[rowIndex].content = content;
+    testData[rowIndex].dates = dates;
 
-         const rowIndex = row.rowIndex - 1;
-         testData[rowIndex].name = name;
-         testData[rowIndex].category = category;
-         testData[rowIndex].content = content;
-         testData[rowIndex].dates = dates;
+    cells[1].innerHTML = name;
+    cells[3].innerHTML = category;
+    cells[4].innerHTML = content;
+    cells[5].innerHTML = dates;
 
-         cells[1].innerHTML = name;
-         cells[3].innerHTML = category;
-         cells[4].innerHTML = content;
-         cells[5].innerHTML = dates;
+    row.classList.remove("editing");
+    editButton.innerHTML = "Edit";
+    renderCategoryTable();
+}
 
-         row.classList.remove("editing");
-         editButton.innerHTML = "Edit";
-         renderCategoryTable();
-     } else {
-         for (let i = 1; i < cells.length - 3; i++) {
-             if (i !== 2) {
-                 const cellValue = cells[i].innerHTML;
-                 if (i === 3) {
-                     let selectHTML = '<select>';
-                     categories.forEach((category) => {
-                         selectHTML += `<option value="${category}" ${category === currentCategory ? 'selected' : ''}>${category}</option>`;
-                     });
-                     selectHTML += '</select>';
-                     cells[i].innerHTML = selectHTML;
-                 } else {
-                     cells[i].innerHTML = `<input type="text" value="${cellValue}">`;
-                 }
-             }
-         }
-         row.classList.add("editing");
-         editButton.innerHTML = "Save";
-     }
- }
+function enterEditMode(row, cells, currentCategory, categories, editButton) {
+    for (let i = 1; i < cells.length - 3; i++) {
+        if (i !== 2) {
+            const cellValue = cells[i].innerHTML;
+            if (i === 3) {
+                let selectHTML = '<select>';
+                categories.forEach((category) => {
+                    selectHTML += `<option value="${category}" ${category === currentCategory ? 'selected' : ''}>${category}</option>`;
+                });
+                selectHTML += '</select>';
+                cells[i].innerHTML = selectHTML;
+            } else {
+                cells[i].innerHTML = `<input type="text" value="${cellValue}">`;
+            }
+        }
+    }
+    row.classList.add("editing");
+    editButton.innerHTML = "Save";
+}
+
+function editRow(button) {
+    const row = button.parentNode.parentNode;
+    const cells = row.getElementsByTagName("td");
+    const editButton = button;
+    const currentCategory = cells[3].innerText;
+    const categories = ["Task", "Idea", "Random Thought"];
+
+    if (row.classList.contains("editing")) {
+        saveChanges(row, cells, editButton);
+    } else {
+        enterEditMode(row, cells, currentCategory, categories, editButton);
+    }
+}
+
 
 function deleteRow(button) {
     const row = button.parentNode.parentNode;
@@ -190,7 +206,6 @@ function deleteRow(button) {
 
  function updateCategoryData() {
      categoryData.length = 0;
-
      testData.forEach((item) => {
          const category = item.category;
          const archivedCount = item.archived ? 0 : 1;
