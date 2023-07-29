@@ -1,0 +1,27 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border: none;
+}
+
+tr {
+    background-color: #b4aaaa;
+}
+
+tr:first-child th {
+    background-color: gray; /* Задаем серый фон для первой (верхней) строки заголовков */
+    color: black;
+    border-top-left-radius: 10px; /* Скругляем левый верхний угол */
+    border-top-right-radius: 10px; /* Скругляем правый верхний угол */
+}
+
+tr:last-child {
+    background-color: #f2f2f2; /* Задаем слегка сероватый фон для последней (нижней) строки */
+    border-bottom-left-radius: 10px; /* Скругляем левый нижний угол */
+    border-bottom-right-radius: 10px; /* Скругляем правый нижний угол */
+}
