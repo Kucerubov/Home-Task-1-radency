@@ -38,19 +38,43 @@
         content: "Содержимое записи 2",
         dates: "",
         archived: false
-    }
+    },
+     {
+         name: "Запись 2",
+         created: "2023-07-28",
+         category: "Random Thought",
+         content: "Содержимое записи 2",
+         dates: "",
+         archived: true
+     },
+     {
+         name: "Запись 2",
+         created: "2023-07-28",
+         category: "Idea",
+         content: "Содержимое записи 2",
+         dates: "",
+         archived: true
+     },
+     {
+         name: "Запись 2",
+         created: "2023-07-28",
+         category: "Task",
+         content: "Содержимое записи 2",
+         dates: "",
+         archived: true
+     }
 ];
 
-function renderTable() {
+function renderTable(showArchivedData = false) {
     const table = document.getElementById("myTable");
-    table.innerHTML = ''; // Очистка таблицы
+    table.innerHTML = '';
 
     const headerRow = table.insertRow(0);
     headerRow.innerHTML = '<th>a</th><th>Name</th><th>Created</th><th>Category</th><th>Content</th><th>Dates</th><th>a</th><th>a</th><th>a</th>';
 
     testData.forEach((value, index) => {
         let row = table.insertRow(index + 1);
-        if (!value.archived){
+        if (value.archived === showArchivedData){
             row.innerHTML = `
           <td>a</td>
           <td>${value.name}</td>
@@ -66,6 +90,7 @@ function renderTable() {
     })
 }
 
+// изменить
 function addNewRow() {
     const num = testData.length + 1;
     const currentDate = new Date();
@@ -78,9 +103,10 @@ function addNewRow() {
     {
         name: `Запись ${num}`,
         created: formattedDate,
-        category: `Категория ${num}`,
+        category: `Task`,
         content: `Содержимое записи ${num}`,
-        dates: ""
+        dates: "",
+        archived: false
     }
     )
     renderCategoryTable();
@@ -96,11 +122,9 @@ function addNewRow() {
          rowData.archived = true;
          renderCategoryTable();
          renderTable();
-         console.log(testData);
      }
  }
 
-// Функция для редактирования строки
  function editRow(button) {
      const row = button.parentNode.parentNode;
      const cells = row.getElementsByTagName("td");
@@ -171,11 +195,9 @@ function deleteRow(button) {
          const existingCategory = categoryData.find((categoryItem) => categoryItem.category === category);
 
          if (existingCategory) {
-             // Если категория уже существует, увеличиваем соответствующие счетчики
              existingCategory.archivedCount += archivedCount;
              existingCategory.unarchivedCount += unarchivedCount;
          } else {
-             // Если категории нет, добавляем ее в массив categoryData
              categoryData.push({
                  category: category,
                  archivedCount: archivedCount,
