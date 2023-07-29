@@ -102,11 +102,11 @@ document.querySelector("#toggleButton").addEventListener("click", () => {
           row.innerHTML =
           `
           <tr>
-            <td>${value.name}</td>
+            <td title="${value.name}">${value.name}</td>
             <td>${value.created}</td>
             <td>${value.category}</td>
-            <td>${value.content}</td>
-            <td>${value.dates}</td>
+            <td title="${value.content}">${value.content}</td>
+            <td title="${value.dates}">${value.dates}</td>
             <td class="text-right">
                 <button class="icon-btn" onclick="editRow(this)">
                     <i class="fas fa-edit"></i>
@@ -182,7 +182,6 @@ function saveChanges(row, cells, editButton) {
     const name = cells[0].getElementsByTagName("input")[0].value;
     const category = cells[2].getElementsByTagName("select")[0].value;
     const content = cells[3].getElementsByTagName("input")[0].value;
-
     const datesFromContent = extractAndAppendDates(content);
 
     const rowIndex = row.rowIndex - 1;
@@ -191,14 +190,10 @@ function saveChanges(row, cells, editButton) {
     testData[rowIndex].content = content;
     testData[rowIndex].dates =  datesFromContent ? datesFromContent : "";
 
-    cells[0].innerHTML = name;
-    cells[2].innerHTML = category;
-    cells[3].innerHTML = content;
-    cells[4].innerHTML = datesFromContent ? datesFromContent : "";
-
     row.classList.remove("editing");
     editButton.innerHTML = `<i class="fas fa-edit"></i>`;
     renderCategoryTable();
+    renderTable();
 }
 
 function enterEditMode(row, cells, currentCategory, categories, editButton) {
