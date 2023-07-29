@@ -1,4 +1,4 @@
- const testData = [
+const testData = [
     {
         name: "Запись 1",
         created: "2023-07-27",
@@ -39,30 +39,30 @@
         dates: "",
         archived: false
     },
-     {
-         name: "Запись 2",
-         created: "2023-07-28",
-         category: "Random Thought",
-         content: "Содержимое записи 2",
-         dates: "",
-         archived: true
-     },
-     {
-         name: "Запись 2",
-         created: "2023-07-28",
-         category: "Idea",
-         content: "Содержимое записи 2",
-         dates: "",
-         archived: true
-     },
-     {
-         name: "Запись 2",
-         created: "2023-07-28",
-         category: "Task",
-         content: "Содержимое записи 2",
-         dates: "",
-         archived: true
-     }
+    {
+        name: "Запись 2",
+        created: "2023-07-28",
+        category: "Random Thought",
+        content: "Содержимое записи 2",
+        dates: "",
+        archived: true
+    },
+    {
+        name: "Запись 2",
+        created: "2023-07-28",
+        category: "Idea",
+        content: "Содержимое записи 2",
+        dates: "",
+        archived: true
+    },
+    {
+        name: "Запись 2",
+        created: "2023-07-28",
+        category: "Task",
+        content: "Содержимое записи 2",
+        dates: "",
+        archived: true
+    }
 ];
 
 function renderTable(showArchivedData = false) {
@@ -75,17 +75,17 @@ function renderTable(showArchivedData = false) {
     testData.forEach((value, index) => {
         let row = table.insertRow(index + 1);
         if (value.archived === showArchivedData){
-            row.innerHTML = `
-          <td>a</td>
-          <td>${value.name}</td>
-          <td>${value.created}</td>
-          <td>${value.category}</td>
-          <td>${value.content}</td>
-          <td>${value.dates}</td>
-          <td><button onclick="archiveRow(this)">Архивировать</button></td>
-          <td><button onclick="editRow(this)">Редактировать</button></td>
-          <td><button onclick="deleteRow(this)">Удалить</button></td>
-        `;
+          row.innerHTML = `
+                <td>a</td>
+            <td>${value.name}</td>
+            <td>${value.created}</td>
+            <td>${value.category}</td>
+            <td>${value.content}</td>
+            <td>${value.dates}</td>
+            <td>${value.archived ? '<button onclick="archiveRow(this)">Разархивировать</button>' : '<button onclick="archiveRow(this)">Архивировать</button>'}</td>
+            <td><button onclick="editRow(this)">Редактировать</button></td>
+            <td><button onclick="deleteRow(this)">Удалить</button></td>
+                `;
         }
     })
 }
@@ -120,6 +120,10 @@ function addNewRow() {
 
      if (!rowData.archived) {
          rowData.archived = true;
+         renderCategoryTable();
+         renderTable();
+     }else {
+         rowData.archived = false;
          renderCategoryTable();
          renderTable();
      }
