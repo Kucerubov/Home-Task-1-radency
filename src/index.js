@@ -189,21 +189,20 @@ function saveChanges(row, cells, editButton) {
     testData[rowIndex].name = name;
     testData[rowIndex].category = category;
     testData[rowIndex].content = content;
-    testData[rowIndex].dates = datesFromContent;
+    testData[rowIndex].dates =  datesFromContent ? datesFromContent : "";
 
     cells[0].innerHTML = name;
     cells[2].innerHTML = category;
     cells[3].innerHTML = content;
-    cells[4].innerHTML = datesFromContent;
+    cells[4].innerHTML = datesFromContent ? datesFromContent : "";
 
     row.classList.remove("editing");
     editButton.innerHTML = `<i class="fas fa-edit"></i>`;
     renderCategoryTable();
 }
 
-
 function enterEditMode(row, cells, currentCategory, categories, editButton) {
-    for (let i = 0; i < cells.length - 1; i++) {
+    for (let i = 0; i < cells.length - 2; i++) {
         if (i !== 1) {
             const cellValue = cells[i].innerHTML;
             if (i === 2) {
